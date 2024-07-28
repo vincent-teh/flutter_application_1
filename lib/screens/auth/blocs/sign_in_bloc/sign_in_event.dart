@@ -17,7 +17,4 @@ class SignInRequired extends SignInEvent {
   List<Object> get props => [email, password, super.props];
 }
 
-final class SignInInitial extends SignInEvent {}
-final class SignInFailure extends SignInEvent {}
-final class SignInLoading extends SignInEvent {}
-final class SignInSuccess extends SignInEvent {}
+class SignOutRequired extends SignInEvent {}
