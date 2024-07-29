@@ -23,7 +23,8 @@ class MyAppView extends StatelessWidget {
             onSecondary: Colors.white,
             tertiary: Colors.blueAccent,
             onTertiary: Colors.white,
-            primaryContainer: Colors.white30),
+            primaryContainer: Colors.white30,
+            secondaryContainer: Colors.white),
       ),
       home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
