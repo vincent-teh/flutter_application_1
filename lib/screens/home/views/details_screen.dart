@@ -7,7 +7,7 @@ class DetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(backgroundColor: Theme.of(context).colorScheme.background),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
