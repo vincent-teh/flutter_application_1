@@ -1,5 +1,6 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/screens/home/components/macro.dart';
 
 class DetailsScreen extends StatelessWidget {
   const DetailsScreen({super.key});
@@ -87,6 +88,40 @@ class DetailsScreen extends StatelessWidget {
                         ),
                       ],
                     ),
+                    Row(
+                      children: [
+                        MyMacro(
+                          amount: 467,
+                          icon: CupertinoIcons.flame_fill,
+                          name: " Calorie",
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        MyMacro(
+                          amount: 2.01,
+                          unit: "g",
+                          name: "Protein",
+                          icon: CupertinoIcons.flame_fill,
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        MyMacro(
+                          amount: 10,
+                          icon: CupertinoIcons.flame_fill,
+                          name: "Flame",
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        MyMacro(
+                          amount: 10,
+                          icon: CupertinoIcons.flame_fill,
+                          name: "Flame",
+                        ),
+                      ],
+                    )
                   ],
                 ),
               ),
