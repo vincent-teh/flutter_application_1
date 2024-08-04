@@ -19,7 +19,7 @@ class MyMacro extends StatelessWidget {
         child: Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: Theme.of(context).colorScheme.secondaryContainer,
+          color: Theme.of(context).colorScheme.primaryContainer,
           boxShadow: [
             BoxShadow(
                 color: Colors.grey.shade400,
