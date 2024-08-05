@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/auth/blocs/sign_in_bloc/sign_in_bloc.dart';
+import 'package:flutter_application_1/screens/home/blocs/get_pizza_bloc/get_pizza_bloc.dart';
 import 'package:flutter_application_1/screens/home/views/details_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pizza_repository/pizza_repository.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -35,18 +37,51 @@ class HomeScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 20,
-              childAspectRatio: 9 / 16),
-          itemCount: 6,
-          itemBuilder: (context, index) {
-            return const MyMenuCard();
-          },
-        ),
+        child:
+            BlocBuilder<GetPizzaBloc, GetPizzaState>(builder: (context, state) {
+          if (state is GetPizzaSuccess) {
+            return MyHomePageGridView(
+              itemCount: state.pizzas.length,
+              pizzas: state.pizzas,
+            );
+          }
+          if (state is GetPizzaLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return const Center(
+            child: Text("Error has occured"),
+          );
+        }),
       ),
+    );
+  }
+}
+
+class MyHomePageGridView extends StatelessWidget {
+  final int itemCount;
+  final List<Pizza> pizzas;
+
+  const MyHomePageGridView(
+      {super.key, required this.itemCount, required this.pizzas});
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 20,
+          childAspectRatio: 9 / 16),
+      itemCount: itemCount,
+      itemBuilder: (context, i) {
+        return MyMenuCard(
+          imageAddress: pizzas[i].picture,
+          name: pizzas[i].name,
+          description: pizzas[i].description,
+        );
+      },
     );
   }
 }
@@ -87,7 +122,15 @@ class MyMenuCard extends StatelessWidget {
   final double BORDER_RADIUS = 20.0;
   final double CARD_INNER_PADDING = 15.0;
 
-  const MyMenuCard({super.key});
+  final String imageAddress;
+  final String name;
+  final String description;
+
+  const MyMenuCard(
+      {super.key,
+      required this.imageAddress,
+      required this.name,
+      required this.description});
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +155,7 @@ class MyMenuCard extends StatelessWidget {
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 16),
-              child: Image.asset('assets/1.png'),
+              child: Image.network(imageAddress),
             ),
             const SizedBox(
               height: 20,
@@ -132,11 +175,12 @@ class MyMenuCard extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            const Text("Pepparoni",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-            const Text(
-              "Lorem, ipsum dolor sit amet consectetur nobis suscipit eaque?",
-              style: TextStyle(
+            Text(name,
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+            Text(
+              description,
+              style: const TextStyle(
                 fontSize: 10,
                 fontWeight: FontWeight.normal,
               ),

@@ -6,7 +6,7 @@ part 'get_pizza_event.dart';
 part 'get_pizza_state.dart';
 
 class GetPizzaBloc extends Bloc<GetPizzaEvent, GetPizzaState> {
-  PizzaRepo _pizzaRepo;
+  final PizzaRepo _pizzaRepo;
 
   GetPizzaBloc(this._pizzaRepo) : super(GetPizzaInitial()) {
     on<GetPizza>((event, emit) async {
