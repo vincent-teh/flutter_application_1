@@ -63,6 +63,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     if (val!.isEmpty) {
                       return 'Please fill in this field.';
                     }
+                    return null;
                   },
                   prefixIcon: const Icon(CupertinoIcons.person)),
               MyCustomForm(
