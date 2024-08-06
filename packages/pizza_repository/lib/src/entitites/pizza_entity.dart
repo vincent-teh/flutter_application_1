@@ -9,7 +9,7 @@ class PizzaEntity {
   String name;
   String description;
   int price;
-  int? discount;
+  int discount;
   Macros macros;
 
   PizzaEntity({
@@ -20,7 +20,7 @@ class PizzaEntity {
     required this.name,
     required this.description,
     required this.price,
-    this.discount,
+    required this.discount,
     required this.macros,
   });
 
@@ -47,6 +47,7 @@ class PizzaEntity {
         name: doc["name"],
         description: doc["description"],
         price: doc["price"],
+        discount: doc["discount"],
         macros: Macros.fromEntity(MacrosEntity.fromDocument(doc["macros"])));
   }
 }

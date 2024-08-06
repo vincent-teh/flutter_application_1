@@ -9,7 +9,7 @@ class Pizza {
   String name;
   String description;
   int price;
-  int? discount;
+  int discount;
   Macros macros;
 
   Pizza(
@@ -20,7 +20,7 @@ class Pizza {
       required this.name,
       required this.description,
       required this.price,
-      this.discount,
+      required this.discount,
       required this.macros});
 
   PizzaEntity toEntity() {
@@ -44,6 +44,7 @@ class Pizza {
         spicyLevel: entity.spicyLevel,
         name: entity.name,
         description: entity.description,
+        discount: entity.discount,
         price: entity.price,
         macros: entity.macros);
   }

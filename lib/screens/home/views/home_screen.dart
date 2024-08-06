@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/auth/blocs/sign_in_bloc/sign_in_bloc.dart';
 import 'package:flutter_application_1/screens/home/blocs/get_pizza_bloc/get_pizza_bloc.dart';
+import 'package:flutter_application_1/screens/home/components/menu_row.dart';
 import 'package:flutter_application_1/screens/home/views/details_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pizza_repository/pizza_repository.dart';
@@ -77,43 +78,9 @@ class MyHomePageGridView extends StatelessWidget {
       itemCount: itemCount,
       itemBuilder: (context, i) {
         return MyMenuCard(
-          imageAddress: pizzas[i].picture,
-          name: pizzas[i].name,
-          description: pizzas[i].description,
+          pizza: pizzas[i],
         );
       },
-    );
-  }
-}
-
-class MyMenuTag extends StatelessWidget {
-  final String name;
-  final Color? backgroundColor;
-  final Color? textColor;
-
-  const MyMenuTag(
-      {super.key, required this.name, this.backgroundColor, this.textColor});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 5),
-      child: Container(
-        decoration: BoxDecoration(
-          color: backgroundColor ?? Theme.of(context).colorScheme.secondary,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          child: Text(
-            name,
-            style: TextStyle(
-                color: textColor ?? Theme.of(context).colorScheme.onSecondary,
-                fontWeight: FontWeight.bold,
-                fontSize: 10),
-          ),
-        ),
-      ),
     );
   }
 }
@@ -122,15 +89,9 @@ class MyMenuCard extends StatelessWidget {
   final double BORDER_RADIUS = 20.0;
   final double CARD_INNER_PADDING = 15.0;
 
-  final String imageAddress;
-  final String name;
-  final String description;
+  final Pizza pizza;
 
-  const MyMenuCard(
-      {super.key,
-      required this.imageAddress,
-      required this.name,
-      required this.description});
+  const MyMenuCard({super.key, required this.pizza});
 
   @override
   Widget build(BuildContext context) {
@@ -155,70 +116,97 @@ class MyMenuCard extends StatelessWidget {
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 16),
-              child: Image.network(imageAddress),
+              child: Image.network(pizza.picture),
             ),
             const SizedBox(
               height: 20,
             ),
-            const Row(
-              children: [
-                MyMenuTag(
-                  name: "BEEF",
-                  backgroundColor: Colors.brown,
-                ),
-                MyMenuTag(
-                  name: "SPICY",
-                  backgroundColor: Colors.red,
-                ),
-              ],
+            MyMenuTagRow(
+              isVege: pizza.isVeg,
+              spicyLevel: pizza.spicyLevel,
             ),
             const SizedBox(
               height: 10,
             ),
-            Text(name,
+            Text(pizza.name,
                 style:
                     const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
             Text(
-              description,
+              pizza.description,
               style: const TextStyle(
                 fontSize: 10,
                 fontWeight: FontWeight.normal,
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      "RM15",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      "RM20",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12,
-                          color: Colors.grey.shade500,
-                          decoration: TextDecoration.lineThrough),
-                    ),
-                  ],
-                ),
-                IconButton(
-                    onPressed: () {},
-                    icon: const Icon(CupertinoIcons.add_circled_solid))
-              ],
-            )
+            MyPriceWidget(
+              price: pizza.price.toDouble(),
+              discountPrice: pizza.discount.toDouble(),
+            ),
           ]),
         ),
       ),
+    );
+  }
+}
+
+class MyPriceWidget extends StatelessWidget {
+  final double price;
+  final double discountPrice;
+
+  const MyPriceWidget(
+      {super.key, required this.price, required this.discountPrice});
+
+  @override
+  Widget build(BuildContext context) {
+    if (discountPrice == 0) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "RM ${price.toStringAsFixed(2)}",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+          IconButton(
+              onPressed: () {},
+              icon: const Icon(CupertinoIcons.add_circled_solid))
+        ],
+      );
+    }
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            Text(
+              "RM ${price.toStringAsFixed(2)}",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            const SizedBox(
+              width: 8,
+            ),
+            Text(
+              "RM${discountPrice.toStringAsFixed(2)}",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 10,
+                  color: Colors.grey.shade500,
+                  decoration: TextDecoration.lineThrough),
+            ),
+          ],
+        ),
+        IconButton(
+            onPressed: () {},
+            icon: const Icon(CupertinoIcons.add_circled_solid))
+      ],
     );
   }
 }
