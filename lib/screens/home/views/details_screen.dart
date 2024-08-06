@@ -2,9 +2,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/home/components/macro.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pizza_repository/pizza_repository.dart';
 
 class DetailsScreen extends StatelessWidget {
-  const DetailsScreen({super.key});
+  final String imageAddress;
+  final String title;
+  final double price;
+  final double discountPrice;
+  final Macros macros;
+
+  const DetailsScreen(
+      {super.key,
+      required this.imageAddress,
+      required this.title,
+      required this.price,
+      required this.discountPrice,
+      required this.macros});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +28,9 @@ class DetailsScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Column(
           children: [
-            const MyDetailsImage(),
+            MyDetailsImage(
+              imageAddress: imageAddress,
+            ),
             const SizedBox(
               height: 20,
             ),
@@ -31,86 +46,20 @@ class DetailsScreen extends StatelessWidget {
                 borderRadius: BorderRadiusDirectional.circular(20.0),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(20.0),
                 child: Column(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Expanded(
-                          flex: 2,
-                          child: Text(
-                            "Magnificant Peperoni",
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  "RM 15",
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary),
-                                ),
-                                Text(
-                                  "RM 20",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.grey.shade400,
-                                      decoration: TextDecoration.lineThrough),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        MyMacro(
-                          amount: 467,
-                          icon: FontAwesomeIcons.fire,
-                          name: " Calorie",
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        MyMacro(
-                          amount: 2.01,
-                          unit: "g",
-                          name: "Protein",
-                          icon: FontAwesomeIcons.dumbbell,
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        MyMacro(
-                          amount: 10.5,
-                          icon: Icons.oil_barrel,
-                          name: "Fat",
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        MyMacro(
-                          amount: 10,
-                          icon: FontAwesomeIcons.bowlRice,
-                          name: "Carbs",
-                        ),
-                      ],
+                    MyTitleAndPriceRow(
+                      title: title,
+                      price: price,
+                      discountPrice: discountPrice,
                     ),
                     const SizedBox(
-                      height: 40,
+                      height: 20,
+                    ),
+                    MyMacrosRow(macros: macros),
+                    const SizedBox(
+                      height: 60,
                     ),
                     const MyOrderButton()
                   ],
@@ -126,8 +75,9 @@ class DetailsScreen extends StatelessWidget {
 
 class MyDetailsImage extends StatelessWidget {
   final double imageSizeFactor = 0.9;
+  final String imageAddress;
 
-  const MyDetailsImage({super.key});
+  const MyDetailsImage({super.key, required this.imageAddress});
 
   @override
   Widget build(BuildContext context) {
@@ -145,12 +95,125 @@ class MyDetailsImage extends StatelessWidget {
       child: FractionallySizedBox(
           heightFactor: imageSizeFactor,
           widthFactor: imageSizeFactor,
-          child: Image.asset("assets/1.png")),
+          child: Image.network(imageAddress)),
+    );
+  }
+}
+
+class MyTitleAndPriceRow extends StatelessWidget {
+  final String title;
+  final double price;
+  final double discountPrice;
+
+  const MyTitleAndPriceRow(
+      {super.key,
+      required this.title,
+      required this.price,
+      required this.discountPrice});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          flex: 2,
+          child: Text(
+            title.toUpperCase(),
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 1,
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: (discountPrice > 0)
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        "RM ${discountPrice.toStringAsFixed(2)}",
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.primary),
+                      ),
+                      Text(
+                        "RM ${price.toStringAsFixed(2)}",
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey.shade400,
+                            decoration: TextDecoration.lineThrough),
+                      ),
+                    ],
+                  )
+                : Text(
+                    "RM ${price.toStringAsFixed(2)}",
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.primary),
+                  ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class MyMacrosRow extends StatelessWidget {
+  static const double WIDGET_WIDTH = 8.0;
+
+  final Macros macros;
+
+  const MyMacrosRow({super.key, required this.macros});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        MyMacro(
+          amount: macros.calories.toDouble(),
+          icon: FontAwesomeIcons.fire,
+          name: " Calorie",
+        ),
+        const SizedBox(
+          width: WIDGET_WIDTH,
+        ),
+        MyMacro(
+          amount: macros.protein.toDouble(),
+          unit: "g",
+          name: "Protein",
+          icon: FontAwesomeIcons.dumbbell,
+        ),
+        const SizedBox(
+          width: WIDGET_WIDTH,
+        ),
+        MyMacro(
+          amount: macros.fat.toDouble(),
+          icon: Icons.oil_barrel,
+          name: "Fat",
+        ),
+        const SizedBox(
+          width: WIDGET_WIDTH,
+        ),
+        MyMacro(
+          amount: macros.carbs.toDouble(),
+          icon: FontAwesomeIcons.bowlRice,
+          name: "Carbs",
+        ),
+      ],
     );
   }
 }
 
 class MyOrderButton extends StatelessWidget {
+  static const double BORDER_RADIUS = 20;
+
   const MyOrderButton({super.key});
 
   @override
@@ -162,7 +225,9 @@ class MyOrderButton extends StatelessWidget {
                 backgroundColor: Theme.of(context).colorScheme.primary,
                 foregroundColor: Theme.of(context).colorScheme.onPrimary,
                 shadowColor: Theme.of(context).colorScheme.shadow,
-                elevation: 3),
+                elevation: 3,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(BORDER_RADIUS))),
             onPressed: () {},
             child: const Padding(
               padding: EdgeInsets.all(6.0),

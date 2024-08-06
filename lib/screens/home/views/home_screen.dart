@@ -106,7 +106,13 @@ class MyMenuCard extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute<void>(
-              builder: (BuildContext context) => const DetailsScreen(),
+              builder: (BuildContext context) => DetailsScreen(
+                title: pizza.name,
+                imageAddress: pizza.picture,
+                price: pizza.price.toDouble(),
+                discountPrice: pizza.discount.toDouble(),
+                macros: pizza.macros,
+              ),
             ),
           );
         },

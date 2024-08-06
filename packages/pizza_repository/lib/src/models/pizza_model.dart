@@ -1,6 +1,7 @@
 import '../entitites/entities.dart';
 import 'models.dart';
 
+
 class Pizza {
   String pizzaId;
   String picture;
@@ -8,8 +9,8 @@ class Pizza {
   int spicyLevel;
   String name;
   String description;
-  int price;
-  int discount;
+  double price;
+  double discount;
   Macros macros;
 
   Pizza(

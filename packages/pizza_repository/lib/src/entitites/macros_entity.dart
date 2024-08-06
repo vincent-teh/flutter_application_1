@@ -1,8 +1,8 @@
 class MacrosEntity {
-  int calories;
-  int protein;
-  int fat;
-  int carbs;
+  double calories;
+  double protein;
+  double fat;
+  double carbs;
 
   MacrosEntity({
     required this.calories,
@@ -22,9 +22,13 @@ class MacrosEntity {
 
   static MacrosEntity fromDocument(Map<String, dynamic> doc) {
     return MacrosEntity(
-        calories: doc["calories"],
-        carbs: doc["carbs"],
-        fat: doc["fat"],
-        protein: doc["protein"]);
+        calories: checkIsDouble(doc["calories"]),
+        carbs: checkIsDouble(doc["carbs"]),
+        fat: checkIsDouble(doc["fat"]),
+        protein: checkIsDouble(doc["protein"]));
+  }
+
+  static double checkIsDouble(dynamic val) {
+    return (val is int) ? val.toDouble() : val;
   }
 }

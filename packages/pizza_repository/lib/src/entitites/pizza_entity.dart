@@ -8,8 +8,8 @@ class PizzaEntity {
   int spicyLevel;
   String name;
   String description;
-  int price;
-  int discount;
+  double price;
+  double discount;
   Macros macros;
 
   PizzaEntity({
@@ -46,8 +46,12 @@ class PizzaEntity {
         spicyLevel: doc["spicyLevel"],
         name: doc["name"],
         description: doc["description"],
-        price: doc["price"],
-        discount: doc["discount"],
+        price: checkIsDouble(doc["price"]),
+        discount: checkIsDouble(doc["discount"]),
         macros: Macros.fromEntity(MacrosEntity.fromDocument(doc["macros"])));
+  }
+
+  static double checkIsDouble(dynamic val) {
+    return (val is int) ? val.toDouble() : val;
   }
 }
