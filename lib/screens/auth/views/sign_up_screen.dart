@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_application_1/screens/auth/blocs/sign_up_bloc/sign_up_bloc.dart';
 import 'package:flutter_application_1/screens/auth/components/my_form_field.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

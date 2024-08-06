@@ -86,8 +86,8 @@ class MyHomePageGridView extends StatelessWidget {
 }
 
 class MyMenuCard extends StatelessWidget {
-  final double BORDER_RADIUS = 20.0;
-  final double CARD_INNER_PADDING = 15.0;
+  static const double BORDER_RADIUS = 20.0;
+  static const double CARD_INNER_PADDING = 15.0;
 
   final Pizza pizza;
 
@@ -117,12 +117,19 @@ class MyMenuCard extends StatelessWidget {
           );
         },
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: CARD_INNER_PADDING),
+          padding: const EdgeInsets.symmetric(horizontal: CARD_INNER_PADDING),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 16),
-              child: Image.network(pizza.picture),
+              child: Container(
+                  decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: [
+                    BoxShadow(
+                        color: Theme.of(context).colorScheme.shadow,
+                        offset: const Offset(3, 3),
+                        blurRadius: 10)
+                  ]),
+                  child: Image.network(pizza.picture)),
             ),
             const SizedBox(
               height: 20,
@@ -139,12 +146,13 @@ class MyMenuCard extends StatelessWidget {
                     const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
             Text(
               pizza.description,
+              textAlign: TextAlign.justify,
               style: const TextStyle(
                 fontSize: 10,
                 fontWeight: FontWeight.normal,
               ),
             ),
-            MyPriceWidget(
+            MyPriceRow(
               price: pizza.price.toDouble(),
               discountPrice: pizza.discount.toDouble(),
             ),
@@ -155,11 +163,11 @@ class MyMenuCard extends StatelessWidget {
   }
 }
 
-class MyPriceWidget extends StatelessWidget {
+class MyPriceRow extends StatelessWidget {
   final double price;
   final double discountPrice;
 
-  const MyPriceWidget(
+  const MyPriceRow(
       {super.key, required this.price, required this.discountPrice});
 
   @override

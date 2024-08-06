@@ -9,8 +9,8 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   final UserRepository _userRepository;
 
   SignUpBloc(this._userRepository) : super(SignUpInitial()) {
-    emit(SignUpLoading());
     on<SignUpRequired>((event, emit) async {
+      emit(SignUpLoading());
       try {
         MyUser myUser =
             await _userRepository.signUp(event.myUser, event.password);

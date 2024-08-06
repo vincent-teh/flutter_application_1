@@ -33,7 +33,7 @@ class PizzaEntity {
       "name": name,
       "description": description,
       "price": price,
-      "discount": discount!,
+      "discount": discount,
       "macros": macros.toEntity().toDocument()
     };
   }

@@ -67,55 +67,64 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
               child: Container(),
             ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height / 1.8,
-                child: Column(children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 50),
-                    child: TabBar(
-                      controller: tabController,
-                      unselectedLabelColor: Theme.of(context)
-                          .colorScheme
-                          .onSurface
-                          .withOpacity(0.5),
-                      labelColor: Theme.of(context).colorScheme.onSurface,
-                      tabs: const [
-                        Padding(
-                          padding: EdgeInsets.all(12),
-                          child:
-                              Text('Sign In', style: TextStyle(fontSize: 18)),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(12),
-                          child:
-                              Text('Sign Up', style: TextStyle(fontSize: 18)),
-                        )
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                      child: TabBarView(
-                    controller: tabController,
-                    children: [
-                      BlocProvider<SignInBloc>(
-                        create: (context) => SignInBloc(
-                            context.read<AuthenticationBloc>().userRepository),
-                        child: const SignInScreen(),
-                      ),
-                      BlocProvider(
-                        create: (context) => SignUpBloc(
-                            context.read<AuthenticationBloc>().userRepository),
-                        child: const SignUpScreen(),
-                      ),
-                    ],
-                  ))
-                ]),
-              ),
-            )
+            MySignInSignUp(
+              tabController: tabController,
+            ),
           ]),
         ),
+      ),
+    );
+  }
+}
+
+class MySignInSignUp extends StatelessWidget {
+  final TabController tabController;
+
+  const MySignInSignUp({super.key, required this.tabController});
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height / 1.8,
+        child: Column(children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 50),
+            child: TabBar(
+              controller: tabController,
+              unselectedLabelColor:
+                  Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+              labelColor: Theme.of(context).colorScheme.onSurface,
+              tabs: const [
+                Padding(
+                  padding: EdgeInsets.all(12),
+                  child: Text('Sign In', style: TextStyle(fontSize: 18)),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(12),
+                  child: Text('Sign Up', style: TextStyle(fontSize: 18)),
+                )
+              ],
+            ),
+          ),
+          Expanded(
+              child: TabBarView(
+            controller: tabController,
+            children: [
+              BlocProvider<SignInBloc>(
+                create: (context) => SignInBloc(
+                    context.read<AuthenticationBloc>().userRepository),
+                child: const SignInScreen(),
+              ),
+              BlocProvider(
+                create: (context) => SignUpBloc(
+                    context.read<AuthenticationBloc>().userRepository),
+                child: const SignUpScreen(),
+              ),
+            ],
+          ))
+        ]),
       ),
     );
   }

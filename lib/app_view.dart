@@ -28,7 +28,7 @@ class MyAppView extends StatelessWidget {
             primaryContainer: Colors.white,
             secondaryContainer: Colors.grey.shade100,
             tertiaryContainer: Colors.grey.shade300,
-            shadow: Colors.grey.shade400),
+            shadow: Colors.grey.shade500),
       ),
       home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
@@ -40,8 +40,8 @@ class MyAppView extends StatelessWidget {
                       context.read<AuthenticationBloc>().userRepository),
                 ),
                 BlocProvider(
-                  create: (context) => GetPizzaBloc(
-                      FirebasePizzaRepo())..add(GetPizza()),
+                  create: (context) =>
+                      GetPizzaBloc(FirebasePizzaRepo())..add(GetPizza()),
                 ),
               ],
               child: const HomeScreen(),
