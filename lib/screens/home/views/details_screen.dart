@@ -74,7 +74,8 @@ class DetailsScreen extends StatelessWidget {
 }
 
 class MyDetailsImage extends StatelessWidget {
-  final double imageSizeFactor = 0.9;
+  static const double IMAGE_SIZE_FACTOR = 0.9;
+  static const double IMAGE_SHADOW_BLUR = 10.0;
   final String imageAddress;
 
   const MyDetailsImage({super.key, required this.imageAddress});
@@ -93,9 +94,16 @@ class MyDetailsImage extends StatelessWidget {
         borderRadius: BorderRadiusDirectional.circular(20.0),
       ),
       child: FractionallySizedBox(
-          heightFactor: imageSizeFactor,
-          widthFactor: imageSizeFactor,
-          child: Image.network(imageAddress)),
+          heightFactor: IMAGE_SIZE_FACTOR,
+          widthFactor: IMAGE_SIZE_FACTOR,
+          child: Container(
+              decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: [
+                BoxShadow(
+                    color: Theme.of(context).colorScheme.shadow,
+                    offset: const Offset(5, 5),
+                    blurRadius: IMAGE_SHADOW_BLUR)
+              ]),
+              child: Image.network(imageAddress))),
     );
   }
 }
